@@ -224,3 +224,6 @@ fabric.properties
 
 # data
 *.csv
+
+# saved_model
+saved_model
