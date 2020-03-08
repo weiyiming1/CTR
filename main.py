@@ -1,5 +1,6 @@
 import yaml
 from model import Model
+from pre import util
 
 
 def get_config(model):
@@ -12,5 +13,8 @@ if __name__ == '__main__':
     name = 'deepfm'
     cfg = get_config(name)
     model = Model(name, cfg)
+
+    util.
+
 
 

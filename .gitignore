@@ -216,6 +216,9 @@ fabric.properties
 
 */.ipynb_checkpoints/*
 
+# macos
+.DS_Store
+
 # IPython
 
 # Remove previous ipynb_checkpoints
@@ -223,7 +226,7 @@ fabric.properties
 
 
 # data
-preprocess/*.csv
+pre/*.csv
 
 # saved_model
 saved_model
