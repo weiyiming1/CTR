@@ -51,7 +51,7 @@ def overview(cfg):
     return feature_idx, feature_val, label_df
 
 
-def process(cfg, split_type=None):
+def process(cfg, augment=None):
     feature_idx, feature_val, label_df = overview(cfg)
 
     train_idx_df, test_idx_df = train_test_split(feature_idx, test_size=cfg["split"])
@@ -62,7 +62,7 @@ def process(cfg, split_type=None):
     train_val_df, validate_val_df = train_test_split(train_val_df, test_size=cfg["split"])
     train_label_df, validate_label_df = train_test_split(train_label_df, test_size=cfg["split"])
 
-    if split_type == 'over_sample':
+    if augment == 'over_sample':
         train_input_raw = [train_idx_df.values, train_val_df.values]
         train_label_raw = np.array(train_label_df['target'])
         bool_train_labels = train_label_raw != 0
@@ -70,7 +70,7 @@ def process(cfg, split_type=None):
     else:
         train_input = [train_idx_df.values, train_val_df.values]
         train_label = train_label_df.values
-        if split_type == 'class_weight':
+        if augment == 'class_weight':
             neg, pos = np.bincount(label_df.values.flatten())
             cfg["class_weight"] = {0: (1 / neg) * (neg + pos), 1: (1 / pos) * (neg + pos)}
 

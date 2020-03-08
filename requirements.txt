@@ -1,0 +1,18 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+tensorboard=2.1.0=py3_0
+tensorflow=2.1.0=gpu_py37h7a4bb67_0
+tensorflow-base=2.1.0=gpu_py37h6c5654b_0
+tensorflow-estimator=2.1.0=pyhd54b08b_0
+tensorflow-gpu=2.1.0=h0d30ee6_0
+cudatoolkit=10.1.243=h6bb024c_0
+cudnn=7.6.5=cuda10.1_0
+hdf5=1.10.4=hb1b8bf9_0
+notebook=6.0.3=py37_0
+numpy=1.18.1=py37h4f9e942_0
+numpy-base=1.18.1=py37hde5b4d6_1
+pandas=1.0.1=py37h0573a6f_0
+python=3.7.6=h0371630_2
+pyyaml=5.3=py37h516909a_0
+scikit-learn=0.22.1=py37hd81dba3_0
