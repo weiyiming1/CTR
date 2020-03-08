@@ -32,15 +32,11 @@ def overview(cfg):
 
     cfg['field_size'] = field_size
     cfg['feature_size'] = feature_size
-    return dfTrain, feature_dict
 
-
-def process(cfg, split_type=None):
-    train_df, feature_dict = overview(cfg)
-    label_df = train_df[['target']]
-    train_df.drop(['target', 'id'], axis=1, inplace=True)
-    feature_idx = train_df.copy()
-    feature_val = train_df.copy()
+    label_df = dfTrain[['target']]
+    dfTrain.drop(['target', 'id'], axis=1, inplace=True)
+    feature_idx = dfTrain.copy()
+    feature_val = dfTrain.copy()
     for col in feature_idx.columns:
         if col in ignore_cols:
             feature_idx.drop(col, axis=1, inplace=True)
@@ -52,6 +48,12 @@ def process(cfg, split_type=None):
             feature_idx[col] = feature_idx[col].map(feature_dict[col])
             feature_val[col] = 1
 
+    return feature_idx, feature_val, label_df
+
+
+def process(cfg, split_type=None):
+    feature_idx, feature_val, label_df = overview(cfg)
+
     train_idx_df, test_idx_df = train_test_split(feature_idx, test_size=cfg["split"])
     train_val_df, test_val_df = train_test_split(feature_val, test_size=cfg["split"])
     train_label_df, test_label_df = train_test_split(label_df, test_size=cfg["split"])
@@ -60,9 +62,17 @@ def process(cfg, split_type=None):
     train_val_df, validate_val_df = train_test_split(train_val_df, test_size=cfg["split"])
     train_label_df, validate_label_df = train_test_split(train_label_df, test_size=cfg["split"])
 
-    train_input = [train_idx_df.values, train_val_df.values]
-    train_label = np.array(train_label_df['target'])
-    bool_train_labels = train_label != 0
+    if split_type == 'over_sample':
+        train_input_raw = [train_idx_df.values, train_val_df.values]
+        train_label_raw = np.array(train_label_df['target'])
+        bool_train_labels = train_label_raw != 0
+        train_input, train_label = oversample_train(train_input_raw, train_label_raw, bool_train_labels)
+    else:
+        train_input = [train_idx_df.values, train_val_df.values]
+        train_label = train_label_df.values
+        if split_type == 'class_weight':
+            neg, pos = np.bincount(label_df.values.flatten())
+            cfg["class_weight"] = {0: (1 / neg) * (neg + pos), 1: (1 / pos) * (neg + pos)}
 
     validate_input = [validate_idx_df.values, validate_val_df.values]
     validate_label = validate_label_df.values
@@ -70,10 +80,10 @@ def process(cfg, split_type=None):
     test_input = [test_idx_df.values, test_val_df.values]
     test_label = test_label_df.values
 
-    return train_input, train_label, bool_train_labels, validate_input, validate_label, test_input, test_label
+    return train_input, train_label, validate_input, validate_label, test_input, test_label
 
 
-def oversample(train_input, train_label, bool_train_labels):
+def oversample_train(train_input, train_label, bool_train_labels):
     pos_idx = train_input[0][bool_train_labels]
     neg_idx = train_input[0][~bool_train_labels]
     pos_val = train_input[1][bool_train_labels]
