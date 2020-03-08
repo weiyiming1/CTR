@@ -2,7 +2,6 @@ import yaml
 from model import Model
 
 
-
 def get_config(model):
     with open('./config.yml') as f:
         model_cfg = yaml.load(f.read(), Loader=yaml.FullLoader)
