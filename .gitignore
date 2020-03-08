@@ -223,7 +223,7 @@ fabric.properties
 
 
 # data
-*.csv
+preprocess/*.csv
 
 # saved_model
 saved_model

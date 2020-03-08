@@ -1,0 +1,12 @@
+deepfm:
+      feature_size: None
+      field_size: None
+      embed_size: 8
+      epoch: 100
+      batch: 10000
+      deep_nn: [256,256]
+      dropout_fm: 0
+      dropout_deep: 0.2
+      output_bias: None
+      split: 0.2
+
